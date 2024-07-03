@@ -27,16 +27,30 @@ def translate_channel(channel):
     else:
         print(f"Channel {channel} not found.")
 
+def translate_frequency(frequency):
+    for channel, data in pmr446_channels.items():
+        if data["frequency"] == frequency:
+            print(f"Frequency {frequency} MHz corresponds to Channel {channel}")
+            print("  Tones: ", ", ".join(map(str, data["tones"])))
+            return
+    print(f"Frequency {frequency} MHz not found.")
+
 def main():
     while True:
         try:
-            user_input = input("Enter PMR446 channel number (1-16) or 'q' to quit: ").strip().lower()
+            user_input = input("Enter 'c' to select by channel or 'f' to select by frequency, or 'q' to quit: ").strip().lower()
             if user_input == 'q':
                 break
-            channel = int(user_input)
-            translate_channel(channel)
+            elif user_input == 'c':
+                channel = int(input("Enter PMR446 channel number (1-16): "))
+                translate_channel(channel)
+            elif user_input == 'f':
+                frequency = float(input("Enter PMR446 frequency (MHz): "))
+                translate_frequency(frequency)
+            else:
+                print("Invalid option. Please enter 'c', 'f', or 'q'.")
         except ValueError:
-            print("Invalid input. Please enter a number between 1 and 16 or 'q' to quit.")
+            print("Invalid input. Please enter a valid number for channel or frequency.")
 
 if __name__ == "__main__":
     main()
